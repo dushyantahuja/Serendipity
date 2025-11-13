@@ -12,6 +12,15 @@
   "background": {
     "service_worker": "background.js"
   },
+  "commands": {
+    "delete-last-bookmark": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+X",
+        "mac": "Command+Shift+X"
+      },
+      "description": "Delete last opened bookmark"
+    }
+  },
   "icons": {
     "16": "icon16.png",
     "48": "icon48.png",
