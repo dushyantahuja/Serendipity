@@ -1,7 +1,7 @@
 // Configuration: Set your bookmark folder name here
 const FOLDER_NAME = "Dushyant"; // Change this to your folder name
 
-// Get all bookmarks from a specific folder by name
+// Get all bookmarks from a specific folder by name (including subfolders)
 async function getBookmarksFromFolderByName(folderName) {
   return new Promise((resolve) => {
     chrome.bookmarks.getTree((bookmarkTreeNodes) => {
@@ -28,8 +28,22 @@ async function getBookmarksFromFolderByName(folderName) {
         return;
       }
       
-      // Get only bookmarks (items with URLs) from the folder
-      const bookmarks = targetFolder.children.filter(item => item.url);
+      // Recursively collect all bookmarks from this folder and its subfolders
+      const bookmarks = [];
+      
+      function collectBookmarks(nodes) {
+        for (const node of nodes) {
+          if (node.url) {
+            // This is a bookmark
+            bookmarks.push(node);
+          } else if (node.children) {
+            // This is a folder, recurse into it
+            collectBookmarks(node.children);
+          }
+        }
+      }
+      
+      collectBookmarks(targetFolder.children);
       resolve(bookmarks);
     });
   });
