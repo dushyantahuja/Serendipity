@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Random Bookmark Opener - Settings</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      margin-top: 0;
+      color: #333;
+      font-size: 24px;
+    }
+    
+    .setting-group {
+      margin-bottom: 25px;
+    }
+    
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #555;
+    }
+    
+    .tree-container {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      max-height: 400px;
+      overflow-y: auto;
+      background-color: white;
+      padding: 10px;
+    }
+    
+    .tree-item {
+      padding: 8px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+      user-select: none;
+    }
+    
+    .tree-item:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .tree-item.selected {
+      background-color: #e3f2fd;
+      color: #1976d2;
+      font-weight: 500;
+    }
+    
+    .tree-item.has-children {
+      position: relative;
+    }
+    
+    .tree-toggle {
+      display: inline-block;
+      width: 16px;
+      margin-right: 4px;
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .tree-icon {
+      margin-right: 6px;
+      color: #666;
+    }
+    
+    .tree-children {
+      margin-left: 20px;
+    }
+    
+    .tree-children.collapsed {
+      display: none;
+    }
+    
+    .info {
+      margin-top: 10px;
+      padding: 12px;
+      background-color: #e3f2fd;
+      border-left: 4px solid #2196F3;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #1565c0;
+    }
+    
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    
+    button:hover {
+      background-color: #45a049;
+    }
+    
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    
+    .status {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      display: none;
+    }
+    
+    .status.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .status.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .instructions {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+      border: 1px solid #e0e0e0;
+    }
+    
+    .instructions h2 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #333;
+    }
+    
+    .instructions ul {
+      margin: 10px 0;
+      padding-left: 20px;
+    }
+    
+    .instructions li {
+      margin-bottom: 8px;
+      color: #666;
+    }
+    
+    code {
+      background-color: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Random Bookmark Opener Settings</h1>
+    
+    <div class="setting-group">
+      <label>Select Bookmark Folder:</label>
+      <div id="folderTree" class="tree-container">
+        <div style="padding: 20px; text-align: center; color: #999;">Loading folders...</div>
+      </div>
+      <div class="info">
+        Choose the folder containing the bookmarks you want to randomly open. All bookmarks in subfolders will also be included.
+      </div>
+    </div>
+    
+    <button id="saveButton" disabled>Save Settings</button>
+    
+    <div id="status" class="status"></div>
+    
+    <div class="instructions">
+      <h2>How to Use:</h2>
+      <ul>
+        <li><strong>Click the extension icon</strong> to open a random bookmark from your selected folder</li>
+        <li><strong>Press <code>Cmd+Shift+X</code></strong> (Mac) or <code>Ctrl+Shift+X</code> (Windows/Linux) to delete the last opened bookmark</li>
+        <li>A green checkmark (✓) badge will appear on the icon when a bookmark is deleted</li>
+      </ul>
+    </div>
+  </div>
+  
+  <script src="options.js"></script>
+</body>
+</html>
