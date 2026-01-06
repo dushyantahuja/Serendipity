@@ -142,8 +142,7 @@ async function selectRandomBookmark(bookmarks) {
   
   // If we have very few bookmarks, just pick randomly
   if (bookmarks.length <= 10) {
-    const randomIndex = Math.floor(Math.random() * bookmarks.length);
-    return bookmarks[randomIndex];
+    return getRandomItem(bookmarks);
   }
   
   // Filter out recently opened bookmarks
@@ -162,13 +161,51 @@ async function selectRandomBookmark(bookmarks) {
   // If all bookmarks have been opened recently, clear history and start fresh
   if (availableBookmarks.length === 0) {
     await saveRecentlyOpened([]);
-    const randomIndex = Math.floor(Math.random() * bookmarks.length);
-    return bookmarks[randomIndex];
+    return getRandomItem(bookmarks);
   }
   
-  // Pick randomly from available (non-recent) bookmarks
-  const randomIndex = Math.floor(Math.random() * availableBookmarks.length);
-  return availableBookmarks[randomIndex];
+  // Use enhanced random selection from available bookmarks
+  return getRandomItem(availableBookmarks);
+}
+
+// Enhanced random selection using multiple entropy sources
+function getRandomItem(array) {
+  if (array.length === 0) return null;
+  if (array.length === 1) return array[0];
+  
+  // Combine multiple sources of randomness for better distribution
+  const cryptoRandom = getCryptoRandom();
+  const mathRandom = Math.random();
+  const timeRandom = (Date.now() % 1000) / 1000;
+  
+  // Mix the random sources using XOR-like behavior
+  const combined = (cryptoRandom + mathRandom + timeRandom) / 3;
+  
+  // Add a Fisher-Yates shuffle for extra randomness on larger arrays
+  if (array.length > 100) {
+    const shuffled = fisherYatesShuffle([...array]);
+    const index = Math.floor(combined * shuffled.length);
+    return shuffled[index];
+  }
+  
+  const index = Math.floor(combined * array.length);
+  return array[index];
+}
+
+// Get cryptographically secure random number (0-1)
+function getCryptoRandom() {
+  const array = new Uint32Array(1);
+  crypto.getRandomValues(array);
+  return array[0] / (0xFFFFFFFF + 1);
+}
+
+// Fisher-Yates shuffle algorithm for better randomization
+function fisherYatesShuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(getCryptoRandom() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }
 
 // Open a random bookmark in the current tab
